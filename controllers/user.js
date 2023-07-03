@@ -58,3 +58,44 @@ module.exports.SIGN_UP_CONTROLLER = async (req, res) => {
     res.status(500).json({ response: 'Sign Up was not successful, user was not created' });
   }
 };
+
+module.exports.LOGIN_CONTROLLER = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(404).json({ response: 'Wrong login details' });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(req.body.password, user.password);
+    if (isPasswordMatch) {
+      const token = jwt.sign(
+        {
+          email: user.email,
+          userId: user.id,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: '2h',
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          email: user.email,
+          userId: user.id,
+        },
+        process.env.JWT_REFRESH_SECRET,
+        {
+          expiresIn: '1d',
+        }
+      );
+
+      return res.status(200).json({ response: 'Login successful', jwt: token, refreshToken: refreshToken });
+    } else {
+      return res.status(404).json({ response: 'Wrong login details' });
+    }
+  } catch (err) {
+    console.log('err', err);
+    res.status(500).json({ response: 'Something went wrong' });
+  }
+};
