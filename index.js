@@ -14,13 +14,13 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(ticketRouter);
 app.use(user);
+app.use(question);
 
 mongoose
   .connect(process.env.MONGO_CONNECT)
   .then(() => {
-    console.log('CONNECTED');
+    console.log('DATABASE CONNECTED');
   })
   .catch((err) => {
     console.log('err', err);

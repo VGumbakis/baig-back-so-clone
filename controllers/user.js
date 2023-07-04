@@ -99,14 +99,3 @@ module.exports.LOGIN_CONTROLLER = async (req, res) => {
     res.status(500).json({ response: 'Something went wrong' });
   }
 };
-
-module.exports.ALL_QUESTIONS_CONTROLLER = async (req, res) => {
-  try {
-    const users = await UserModel.find().sort({ name: 1 });
-
-    res.status(200).json({ response: users });
-  } catch (err) {
-    console.log('err', err);
-    res.status(500).json({ response: 'Something went wrong' });
-  }
-};

@@ -5,6 +5,5 @@ const { SIGN_UP_CONTROLLER, LOGIN_CONTROLLER, ALL_QUESTIONS_CONTROLLER } = requi
 
 router.post('/signUp', SIGN_UP_CONTROLLER);
 router.post('/login', LOGIN_CONTROLLER);
-router.get('/questions', ALL_QUESTIONS_CONTROLLER);
 
 module.exports = router;
