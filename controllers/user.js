@@ -2,7 +2,7 @@ const UserModel = require('../models/user');
 const uniqid = require('uniqid');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-np;
+
 module.exports.SIGN_UP_CONTROLLER = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -94,6 +94,17 @@ module.exports.LOGIN_CONTROLLER = async (req, res) => {
     } else {
       return res.status(404).json({ response: 'Wrong login details' });
     }
+  } catch (err) {
+    console.log('err', err);
+    res.status(500).json({ response: 'Something went wrong' });
+  }
+};
+
+module.exports.ALL_QUESTIONS_CONTROLLER = async (req, res) => {
+  try {
+    const users = await UserModel.find().sort({ name: 1 });
+
+    res.status(200).json({ response: users });
   } catch (err) {
     console.log('err', err);
     res.status(500).json({ response: 'Something went wrong' });
