@@ -1,11 +1,11 @@
-const QuestionModel = require('../models/user');
+const QuestionModel = require('../models/question');
 const uniqid = require('uniqid');
 module.exports.GET_ALL_QUESTIONS_CONTROLLER = async (req, res) => {
   try {
     const questions = await QuestionModel.find().sort({ title: 1 });
 
     const questionsWithAnswerStatus = questions.map((question) => {
-      const answered = question.answers.length > 0;
+      const answered = question.answers && question.answers.length > 0;
       return {
         id: question.id,
         title: question.title,
@@ -66,6 +66,11 @@ module.exports.POST_ANSWER_FOR_QUESTION_CONTROLLER = async (req, res) => {
     if (!question) {
       // Question not found
       return res.status(404).json({ response: 'Question not found' });
+    }
+
+    // Initialize the answers array if it's undefined
+    if (!question.answers) {
+      question.answers = [];
     }
 
     // Create a new answer for the question
