@@ -38,6 +38,23 @@ module.exports.POST_QUESTION_CONTROLLER = async (req, res) => {
   }
 };
 
+module.exports.GET_QUESTION_BY_ID_CONTROLLER = async (req, res) => {
+  try {
+    const questionId = req.params.id;
+
+    const question = await QuestionModel.findOne({ id: questionId });
+
+    if (!question) {
+      return res.status(404).json({ response: 'Question not found' });
+    }
+
+    res.status(200).json(question);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ response: 'Failure, unable to retrieve question' });
+  }
+};
+
 module.exports.DELETE_QUESTION_BY_ID_CONTROLLER = async (req, res) => {
   try {
     const questionId = req.params.id;
